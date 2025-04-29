@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class CombatScreen implements Screen {
@@ -12,13 +13,16 @@ public class CombatScreen implements Screen {
     private Batch batch;
     private OrthographicCamera camera;
 
+    private static Texture background;
 
     public CombatScreen(){
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/tema_principal.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/combate.mp3"));
         music.setVolume(0.2f);
         music.setLooping(true);
         music.play();
+
+        background = new Texture(Gdx.files.internal("combate_limpio.png"));
 
 
     }
