@@ -73,8 +73,6 @@ public class SeleccionScreen implements Screen {
         squirtleImage = new Image(squirtle);
         squirtleImage.setScale(0.2f);
 
-
-
         charmanderImage.setPosition(250, 50);
 
         bulbasaurImage.setPosition(400, 50);
@@ -86,7 +84,6 @@ public class SeleccionScreen implements Screen {
         stage.addActor(bulbasaurImage);
         stage.addActor(squirtleImage);
 
-
         Gdx.input.setInputProcessor(stage);
 
 
@@ -94,6 +91,7 @@ public class SeleccionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("¡Charmander clickeado!");
+                music.stop();
                 game.setScreen(new MapScreen(game));
             }
         });
@@ -102,6 +100,7 @@ public class SeleccionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("¡Bulbasaur clickeado!");
+                music.stop();
                 game.setScreen(new MapScreen(game));
             }
         });
@@ -110,6 +109,7 @@ public class SeleccionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("¡Squirtle clickeado!");
+                music.stop();
                 game.setScreen(new MapScreen(game));
             }
         });
