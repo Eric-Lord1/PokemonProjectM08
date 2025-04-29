@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import poke.iticbcn.alex_and_eric.PokemonFireRedGame;
+
 public class SeleccionScreen implements Screen {
 
     public static Music music;
@@ -35,7 +37,7 @@ public class SeleccionScreen implements Screen {
     public static Texture bulbasaur;
     public static Texture squirtle;
 
-    public SeleccionScreen(){
+    public SeleccionScreen(PokemonFireRedGame game){
 
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/tema_principal.mp3"));
         music.setVolume(0.2f);
@@ -92,6 +94,7 @@ public class SeleccionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("¡Charmander clickeado!");
+                game.setScreen(new MapScreen(game));
             }
         });
 
@@ -99,6 +102,7 @@ public class SeleccionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("¡Bulbasaur clickeado!");
+                game.setScreen(new MapScreen(game));
             }
         });
 
@@ -106,6 +110,7 @@ public class SeleccionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("¡Squirtle clickeado!");
+                game.setScreen(new MapScreen(game));
             }
         });
 
