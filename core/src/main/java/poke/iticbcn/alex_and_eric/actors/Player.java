@@ -34,10 +34,10 @@ public class Player {
             rightFrames[i] = new TextureRegion(sheet, baseX + (i + 9) * frameSpacing, baseY, frameWidth, frameHeight);
         }
 
-        walkDown  = new Animation<>(0.15f, downFrames);
-        walkUp    = new Animation<>(0.15f, upFrames);
-        walkLeft  = new Animation<>(0.15f, leftFrames);
-        walkRight = new Animation<>(0.15f, rightFrames);
+        walkDown  = new Animation<>(0.03f, downFrames);
+        walkUp    = new Animation<>(0.03f, upFrames);
+        walkLeft  = new Animation<>(0.03f, leftFrames);
+        walkRight = new Animation<>(0.03f, rightFrames);
 
         currentAnimation = walkDown;
 
@@ -49,26 +49,44 @@ public class Player {
     public void update(float delta) {
         boolean moving = false;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            x -= speed * delta;
-            currentAnimation = walkLeft;
-            moving = true;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            x += speed * delta;
-            currentAnimation = walkRight;
-            moving = true;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            y += speed * delta;
-            currentAnimation = walkUp;
-            moving = true;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            y -= speed * delta;
-            currentAnimation = walkDown;
+        if (Gdx.input.isTouched()) {
+            int touchX = Gdx.input.getX();
+            int touchY = Gdx.input.getY();
+            touchY = Gdx.graphics.getHeight() - touchY; // corregir eje Y
+
+            // calcular centro del jugador
+            float scale = 4f;
+            float playerCenterX = x + (frameWidth * scale) / 2;
+            float playerCenterY = y + (frameHeight * scale) / 2;
+
+            float diffX = touchX - playerCenterX;
+            float diffY = touchY - playerCenterY;
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                // Movimiento horizontal
+                if (diffX < 0) {
+                    x -= speed * delta;
+                    currentAnimation = walkLeft;
+                } else {
+                    x += speed * delta;
+                    currentAnimation = walkRight;
+                }
+            } else {
+                // Movimiento vertical
+                if (diffY < 0) {
+                    y -= speed * delta;
+                    currentAnimation = walkDown;
+                } else {
+                    y += speed * delta;
+                    currentAnimation = walkUp;
+                }
+            }
             moving = true;
         }
 
         stateTime = moving ? stateTime + delta : 0f;
     }
+
 
     public void render(SpriteBatch batch) {
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
