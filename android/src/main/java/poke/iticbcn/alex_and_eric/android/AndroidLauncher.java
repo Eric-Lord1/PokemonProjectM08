@@ -4,7 +4,8 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import poke.iticbcn.alex_and_eric.MainScreen;
+
+import poke.iticbcn.alex_and_eric.PokemonFireRedGame;
 
 /** Launches the Android application. */
 public class AndroidLauncher extends AndroidApplication {
@@ -13,6 +14,6 @@ public class AndroidLauncher extends AndroidApplication {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
         configuration.useImmersiveMode = true; // Recommended, but not required.
-        initialize(new MainScreen(), configuration);
+        initialize(new PokemonFireRedGame(), configuration);
     }
 }
