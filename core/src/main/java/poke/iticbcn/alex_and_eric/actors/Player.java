@@ -87,6 +87,15 @@ public class Player {
         stateTime = moving ? stateTime + delta : 0f;
     }
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+
 
     public void render(SpriteBatch batch) {
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
