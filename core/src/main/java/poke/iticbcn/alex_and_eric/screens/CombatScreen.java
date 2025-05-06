@@ -27,9 +27,12 @@ public class CombatScreen implements Screen {
     private static Texture background;
     private static Texture combatText;
     private static Texture pkmEnemigo;
+    private static Texture pkmAliado;
     private static Texture vidaEnemigo;
     private static Texture vidaAliado;
     private static GlyphLayout txtPlacaje;
+    private static GlyphLayout txtPkmEnemigo;
+    private static GlyphLayout txtPkmAliado;
 
     public CombatScreen(PokemonFireRedGame game){
 
@@ -41,6 +44,7 @@ public class CombatScreen implements Screen {
         background = new Texture(Gdx.files.internal("combate_limpio.png"));
         combatText = new Texture(Gdx.files.internal("attack_selection.png"));
         pkmEnemigo = new Texture(Gdx.files.internal("squirtle.png"));
+        pkmAliado = new Texture(Gdx.files.internal("back/4_back.png"));
         vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top.png"));
         vidaAliado = new Texture(Gdx.files.internal("hpbar_bot.png"));
 
@@ -48,6 +52,12 @@ public class CombatScreen implements Screen {
         font = new BitmapFont();
         txtPlacaje = new GlyphLayout();
         txtPlacaje.setText(new BitmapFont(), "Placaje");
+
+        txtPkmAliado = new GlyphLayout();
+        txtPkmAliado.setText(new BitmapFont(), "Charmander");
+
+        txtPkmEnemigo = new GlyphLayout();
+        txtPkmEnemigo.setText(new BitmapFont(), "Squirt");
 
 
         camera = new OrthographicCamera();
@@ -78,12 +88,17 @@ public class CombatScreen implements Screen {
         batch.begin();
         batch.draw(background, 0, 250, 1024, 518);
         batch.draw(combatText, 0, 0, 1024, 250);
-        batch.draw(pkmEnemigo, 650, 450, 250,250);
+        batch.draw(pkmEnemigo, 650, 450, 200,200);
+        batch.draw(pkmAliado, 175, 210, 250,250);
         batch.draw(vidaEnemigo, 100, 500, 300,200);
-        batch.draw(vidaAliado, 650, 250, 300,200);
+        batch.draw(vidaAliado, 650, 250, 350,200);
         font.setColor(Color.BLACK);
         font.getData().setScale(3.5f);
         font.draw(batch, "Pajilla", 50, 190);
+
+        font.getData().setScale(2.8f);
+        font.draw(batch, "Charmander", 690, 420);
+        font.draw(batch, "Squirt", 140, 650);
         font.getData().setScale(3.0f);
         font.draw(batch, "35", 850, 185);
         font.draw(batch, "35", 940, 185);
