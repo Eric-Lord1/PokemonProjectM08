@@ -21,6 +21,7 @@ public class MapScreen implements Screen {
     private Texture mapTexture;
     private Music backgroundMusic;
     private Player player;
+    private String inicial;
 
     private List<Rectangle> gespaZones;
 
@@ -28,9 +29,10 @@ public class MapScreen implements Screen {
     private float scaleX;
     private float scaleY;
 
-    public MapScreen(PokemonFireRedGame game) {
+    public MapScreen(PokemonFireRedGame game, String inicial) {
         this.game = game;
         this.batch = game.getBatch();
+        this.inicial = inicial;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class MapScreen implements Screen {
                     System.out.println("S'ha iniciat un combat!");
                     backgroundMusic.stop();
                     Gdx.input.setInputProcessor(null);
-                    game.setScreen(new CombatScreen(this.game));
+                    game.setScreen(new CombatScreen(this.game, this.inicial));
                     return;
                 }
             }

@@ -32,6 +32,7 @@ public class CombatScreen implements Screen {
     private int contVida = 0;
     boolean mensajeMostrado = false;
     boolean esperandoNuevoToque = false;
+    private String inicial;
 
     private static Texture background;
     private static Texture combatText;
@@ -46,8 +47,9 @@ public class CombatScreen implements Screen {
     private static GlyphLayout txtPkmEnemigo;
     private static GlyphLayout txtPkmAliado;
 
-    public CombatScreen(PokemonFireRedGame game){
+    public CombatScreen(PokemonFireRedGame game, String inicial){
         this.game = game;
+        this.inicial = inicial;
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/combate.mp3"));
         music.setVolume(0.2f);
         music.setLooping(true);
@@ -57,7 +59,9 @@ public class CombatScreen implements Screen {
         combatText = new Texture(Gdx.files.internal("attack_selection.png"));
         pkmEnemigo = new Texture(Gdx.files.internal("squirtle.png"));
         txtTackleTexture = new Texture(Gdx.files.internal("placaje.png"));
-        pkmAliado = new Texture(Gdx.files.internal("back/4_back.png"));
+        if(inicial.equalsIgnoreCase("charmander"))pkmAliado = new Texture(Gdx.files.internal("back/4_back.png"));
+        if(inicial.equalsIgnoreCase("bulbasaur"))pkmAliado = new Texture(Gdx.files.internal("back/1_back.png"));
+        if(inicial.equalsIgnoreCase("squirtle"))pkmAliado = new Texture(Gdx.files.internal("back/7_back.png"));
         if(contVida == 0)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top.png"));
         if(contVida == 1)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top_50.png"));
         if(contVida == 2)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top_0.png"));
@@ -137,7 +141,7 @@ public class CombatScreen implements Screen {
 
 
         font.getData().setScale(2.8f);
-        font.draw(batch, "Charmander", 690, 420);
+        font.draw(batch, inicial, 690, 420);
         font.draw(batch, "Squirt", 140, 650);
         if(showStats && contVida!=2){
             font.getData().setScale(3.0f);
@@ -168,7 +172,7 @@ public class CombatScreen implements Screen {
                 esperandoNuevoToque = true;
             } else if (esperandoNuevoToque && Gdx.input.justTouched()) {
 
-                game.setScreen(new MapScreen((PokemonFireRedGame) game));
+                game.setScreen(new MapScreen((PokemonFireRedGame) game, inicial));
             }
         }
         if(!showStats){

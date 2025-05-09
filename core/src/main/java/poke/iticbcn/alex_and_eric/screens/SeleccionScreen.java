@@ -90,30 +90,27 @@ public class SeleccionScreen implements Screen {
         charmanderImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("¡Charmander clickeado!");
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game));
+                game.setScreen(new MapScreen(game, "charmander"));
             }
         });
 
         bulbasaurImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("¡Bulbasaur clickeado!");
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game));
+                game.setScreen(new MapScreen(game, "bulbasaur"));
             }
         });
 
         squirtleImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("¡Squirtle clickeado!");
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game));
+                game.setScreen(new MapScreen(game,"squirtle"));
             }
         });
 
