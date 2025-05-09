@@ -67,11 +67,11 @@ public class MapScreen implements Screen {
 
         for (Rectangle zona : gespaZones) {
             if (zona.contains(playerCenterX, playerCenterY)) {
-                if (Math.random() < 0.1) {
+                if (Math.random() < 0.02) {
                     System.out.println("S'ha iniciat un combat!");
                     backgroundMusic.stop();
                     Gdx.input.setInputProcessor(null);
-                    //game.setScreen(new CombatScreen(this));
+                    game.setScreen(new CombatScreen(this.game));
                     return;
                 }
             }

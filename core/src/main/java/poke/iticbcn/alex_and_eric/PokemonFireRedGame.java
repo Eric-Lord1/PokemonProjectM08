@@ -13,7 +13,7 @@ public class PokemonFireRedGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        setScreen(new CombatScreen(this));
+        setScreen(new SeleccionScreen(this));
     }
 
     public SpriteBatch getBatch() {
