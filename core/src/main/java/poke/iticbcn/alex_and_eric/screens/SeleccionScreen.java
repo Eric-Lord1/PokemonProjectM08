@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import poke.iticbcn.alex_and_eric.PokemonFireRedGame;
-import poke.iticbcn.alex_and_eric.actors.Player;
 
 public class SeleccionScreen implements Screen {
 
@@ -39,8 +38,6 @@ public class SeleccionScreen implements Screen {
     public static Texture squirtle;
 
     public SeleccionScreen(PokemonFireRedGame game){
-
-        Player player = new Player();
 
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/tema_principal.mp3"));
         music.setVolume(0.2f);
@@ -93,30 +90,27 @@ public class SeleccionScreen implements Screen {
         charmanderImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("¡Charmander clickeado!");
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game,player));
+                game.setScreen(new MapScreen(game, "Charmander"));
             }
         });
 
         bulbasaurImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("¡Bulbasaur clickeado!");
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game,player));
+                game.setScreen(new MapScreen(game, "Bulbasaur"));
             }
         });
 
         squirtleImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("¡Squirtle clickeado!");
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game,player));
+                game.setScreen(new MapScreen(game,"Squirtle"));
             }
         });
 
