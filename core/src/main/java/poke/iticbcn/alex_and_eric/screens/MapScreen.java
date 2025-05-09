@@ -21,25 +21,19 @@ public class MapScreen implements Screen {
     private Texture mapTexture;
     private Music backgroundMusic;
     private Player player;
-    private String inicial;
-
     private List<Rectangle> gespaZones;
-
-    // Escalat
     private float scaleX;
     private float scaleY;
 
-    public MapScreen(PokemonFireRedGame game, String inicial) {
+    public MapScreen(PokemonFireRedGame game) {
         this.game = game;
         this.batch = game.getBatch();
-        this.inicial = inicial;
     }
 
     @Override
     public void show() {
         mapTexture = new Texture("ruta11.png");
 
-        // Escales segons la pantalla
         scaleX = (float) Gdx.graphics.getWidth() / mapTexture.getWidth();
         scaleY = (float) Gdx.graphics.getHeight() / mapTexture.getHeight();
 
@@ -49,7 +43,6 @@ public class MapScreen implements Screen {
 
         player = new Player();
 
-        // Escalem la zona de gespa
         gespaZones = new ArrayList<>();
         gespaZones.add(new Rectangle(
             469 * scaleX,
@@ -73,7 +66,7 @@ public class MapScreen implements Screen {
                     System.out.println("S'ha iniciat un combat!");
                     backgroundMusic.stop();
                     Gdx.input.setInputProcessor(null);
-                    game.setScreen(new CombatScreen(this.game, this.inicial));
+                    game.setScreen(new CombatScreen(this.game));
                     return;
                 }
             }
