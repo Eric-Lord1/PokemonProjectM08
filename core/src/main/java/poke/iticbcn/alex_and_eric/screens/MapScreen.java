@@ -71,7 +71,7 @@ public class MapScreen implements Screen {
                     System.out.println("S'ha iniciat un combat!");
                     backgroundMusic.stop();
                     Gdx.input.setInputProcessor(null);
-                    game.setScreen(new CombatScreen());
+                    game.setScreen(new CombatScreen(this.game));
                     return;
                 }
             }
