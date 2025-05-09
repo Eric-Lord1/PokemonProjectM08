@@ -92,7 +92,7 @@ public class SeleccionScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game, "charmander"));
+                game.setScreen(new MapScreen(game, "Charmander"));
             }
         });
 
@@ -101,7 +101,7 @@ public class SeleccionScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game, "bulbasaur"));
+                game.setScreen(new MapScreen(game, "Bulbasaur"));
             }
         });
 
@@ -110,7 +110,7 @@ public class SeleccionScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game,"squirtle"));
+                game.setScreen(new MapScreen(game,"Squirtle"));
             }
         });
 

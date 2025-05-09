@@ -1,5 +1,7 @@
 package poke.iticbcn.alex_and_eric.screens;
 
+import static com.badlogic.gdx.math.MathUtils.random;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -33,6 +35,7 @@ public class CombatScreen implements Screen {
     boolean mensajeMostrado = false;
     boolean esperandoNuevoToque = false;
     private String inicial;
+    private String enemigo;
 
     private static Texture background;
     private static Texture combatText;
@@ -50,6 +53,7 @@ public class CombatScreen implements Screen {
     public CombatScreen(PokemonFireRedGame game, String inicial){
         this.game = game;
         this.inicial = inicial;
+        int num = random.nextInt(100) + 1;
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/combate.mp3"));
         music.setVolume(0.2f);
         music.setLooping(true);
@@ -57,11 +61,35 @@ public class CombatScreen implements Screen {
 
         background = new Texture(Gdx.files.internal("combate_limpio.png"));
         combatText = new Texture(Gdx.files.internal("attack_selection.png"));
-        pkmEnemigo = new Texture(Gdx.files.internal("squirtle.png"));
+
+
+        if (num <= 1) {
+            pkmEnemigo = new Texture(Gdx.files.internal("font/raticate.png"));
+            enemigo = "Raticate";
+        } else if (num <= 10) {
+            pkmEnemigo = new Texture(Gdx.files.internal("font/pidgeotto.png"));
+            enemigo = "Pidgeotto";
+        } else if (num <= 25) {
+            pkmEnemigo = new Texture(Gdx.files.internal("font/rattata.png"));
+            enemigo = "Rattata";
+        } else if (num <= 50) {
+            pkmEnemigo = new Texture(Gdx.files.internal("font/pidgey.png"));
+            enemigo = "Pidgey";
+        } else if (num <= 70) {
+            pkmEnemigo = new Texture(Gdx.files.internal("font/spearow.png"));
+            enemigo = "Spearow";
+        } else if (num <= 85) {
+            pkmEnemigo = new Texture(Gdx.files.internal("font/sandsrew.png"));
+            enemigo = "Sandsrew";
+        } else {
+            pkmEnemigo = new Texture(Gdx.files.internal("font/ekans.png"));
+            enemigo = "Ekans";
+        }
+
         txtTackleTexture = new Texture(Gdx.files.internal("placaje.png"));
-        if(inicial.equalsIgnoreCase("charmander"))pkmAliado = new Texture(Gdx.files.internal("back/4_back.png"));
-        if(inicial.equalsIgnoreCase("bulbasaur"))pkmAliado = new Texture(Gdx.files.internal("back/1_back.png"));
-        if(inicial.equalsIgnoreCase("squirtle"))pkmAliado = new Texture(Gdx.files.internal("back/7_back.png"));
+        if(inicial.equalsIgnoreCase("Charmander"))pkmAliado = new Texture(Gdx.files.internal("back/4_back.png"));
+        if(inicial.equalsIgnoreCase("Bulbasaur"))pkmAliado = new Texture(Gdx.files.internal("back/1_back.png"));
+        if(inicial.equalsIgnoreCase("Squirtle"))pkmAliado = new Texture(Gdx.files.internal("back/7_back.png"));
         if(contVida == 0)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top.png"));
         if(contVida == 1)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top_50.png"));
         if(contVida == 2)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top_0.png"));
@@ -133,8 +161,8 @@ public class CombatScreen implements Screen {
         batch.begin();
         batch.draw(background, 0, 250, 1024, 518);
         batch.draw(combatText, 0, 0, 1024, 250);
-        batch.draw(pkmEnemigo, 650, 450, 200,200);
-        batch.draw(pkmAliado, 175, 210, 250,250);
+        batch.draw(pkmEnemigo, 620, 430, 250,250);
+        batch.draw(pkmAliado, 175, 250, 200,200);
         batch.draw(vidaEnemigo, 100, 500, 300,200);
         batch.draw(vidaAliado, 650, 250, 350,200);
         font.setColor(Color.BLACK);
@@ -142,7 +170,7 @@ public class CombatScreen implements Screen {
 
         font.getData().setScale(2.8f);
         font.draw(batch, inicial, 690, 420);
-        font.draw(batch, "Squirt", 140, 650);
+        font.draw(batch, enemigo, 140, 650);
         if(showStats && contVida!=2){
             font.getData().setScale(3.0f);
             font.draw(batch, "35", 850, 185);
