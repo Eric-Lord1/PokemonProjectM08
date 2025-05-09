@@ -3,13 +3,10 @@ package poke.iticbcn.alex_and_eric.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import poke.iticbcn.alex_and_eric.PokemonFireRedGame;
 import poke.iticbcn.alex_and_eric.actors.Player;
@@ -17,22 +14,24 @@ import poke.iticbcn.alex_and_eric.actors.Player;
 public class MapScreen implements Screen {
 
     private final PokemonFireRedGame game;
-    private SpriteBatch batch;
+    private final SpriteBatch batch;
+    private final Player player;
     private Texture mapTexture;
+    private Pixmap pixmap;
     private Music backgroundMusic;
-    private Player player;
-    private List<Rectangle> gespaZones;
     private float scaleX;
     private float scaleY;
 
-    public MapScreen(PokemonFireRedGame game) {
+    public MapScreen(PokemonFireRedGame game, Player player) {
         this.game = game;
         this.batch = game.getBatch();
+        this.player = player;
     }
 
     @Override
     public void show() {
-        mapTexture = new Texture("ruta11.png");
+        pixmap = new Pixmap(Gdx.files.internal("ruta11.png"));
+        mapTexture = new Texture(pixmap);
 
         scaleX = (float) Gdx.graphics.getWidth() / mapTexture.getWidth();
         scaleY = (float) Gdx.graphics.getHeight() / mapTexture.getHeight();
@@ -40,16 +39,6 @@ public class MapScreen implements Screen {
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Route11Music.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
-
-        player = new Player();
-
-        gespaZones = new ArrayList<>();
-        gespaZones.add(new Rectangle(
-            469 * scaleX,
-            225 * scaleY,
-            80 * scaleX,
-            41 * scaleY
-        ));
     }
 
     @Override
@@ -60,13 +49,21 @@ public class MapScreen implements Screen {
         float playerCenterX = player.getX() + (16 * escala) / 2;
         float playerCenterY = player.getY() + (23 * escala) / 2;
 
-        for (Rectangle zona : gespaZones) {
-            if (zona.contains(playerCenterX, playerCenterY)) {
+        int pixelX = (int)(playerCenterX / scaleX);
+        int pixelY = pixmap.getHeight() - (int)(playerCenterY / scaleY); // Invert Y
+
+        if (pixelX >= 0 && pixelX < pixmap.getWidth() && pixelY >= 0 && pixelY < pixmap.getHeight()) {
+            int pixel = pixmap.getPixel(pixelX, pixelY);
+            int r = (pixel >> 24) & 0xff;
+            int g = (pixel >> 16) & 0xff;
+            int b = (pixel >> 8) & 0xff;
+
+            if (g > 140 && r < 100 && b < 100) {
                 if (Math.random() < 0.02) {
                     System.out.println("S'ha iniciat un combat!");
                     backgroundMusic.stop();
                     Gdx.input.setInputProcessor(null);
-                    game.setScreen(new CombatScreen(this.game));
+                    game.setScreen(new CombatScreen(game, this.player));
                     return;
                 }
             }
@@ -83,6 +80,7 @@ public class MapScreen implements Screen {
     public void dispose() {
         batch.dispose();
         mapTexture.dispose();
+        pixmap.dispose();
         backgroundMusic.dispose();
         player.dispose();
     }

@@ -10,111 +10,78 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import poke.iticbcn.alex_and_eric.PokemonFireRedGame;
+import poke.iticbcn.alex_and_eric.actors.Player;
+import poke.iticbcn.alex_and_eric.assets.AssetLoader;
 
 public class CombatScreen implements Screen {
 
-    public static Game game;
-    public static Music music;
+    private enum CombatState { SELECCION, ATACANT, MISSATGE, FINAL }
+
+    private CombatState estat = CombatState.SELECCION;
+    private final Game game;
+    private final Player player;
+    private Stage stage;
     private Batch batch;
     private OrthographicCamera camera;
-    private Stage stage;
     private BitmapFont font;
-    private boolean showStats = true;
+    private Image txtTackleImage, flechaImg;
+    private Music music;
     private int contVida = 0;
-    boolean mensajeMostrado = false;
-    boolean esperandoNuevoToque = false;
 
-    private static Texture background;
-    private static Texture combatText;
-    private static Texture pkmEnemigo;
-    private static Texture pkmAliado;
-    private static Texture vidaEnemigo;
-    private static Texture vidaAliado;
-    private static Texture txtTackleTexture;
-    private static Image txtTackleImage;
-    private static Image flechaImg;
-    private static GlyphLayout txtPlacaje;
-    private static GlyphLayout txtPkmEnemigo;
-    private static GlyphLayout txtPkmAliado;
-
-    public CombatScreen(PokemonFireRedGame game){
+    public CombatScreen(Game game, Player player) {
         this.game = game;
+        this.player = player;
+        init();
+    }
+
+    private void init() {
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/combate.mp3"));
         music.setVolume(0.2f);
         music.setLooping(true);
         music.play();
 
-        background = new Texture(Gdx.files.internal("combate_limpio.png"));
-        combatText = new Texture(Gdx.files.internal("attack_selection.png"));
-        pkmEnemigo = new Texture(Gdx.files.internal("squirtle.png"));
-        txtTackleTexture = new Texture(Gdx.files.internal("placaje.png"));
-        pkmAliado = new Texture(Gdx.files.internal("back/4_back.png"));
-        if(contVida == 0)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top.png"));
-        if(contVida == 1)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top_50.png"));
-        if(contVida == 2)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top_0.png"));
-        vidaAliado = new Texture(Gdx.files.internal("hpbar_bot.png"));
-        Texture flecha = new Texture(Gdx.files.internal("flecha.png"));
-
-
-        font = new BitmapFont();
-        txtPlacaje = new GlyphLayout();
-        txtPlacaje.setText(new BitmapFont(), "Placaje");
-
-        txtPkmAliado = new GlyphLayout();
-        txtPkmAliado.setText(new BitmapFont(), "Charmander");
-
-        txtPkmEnemigo = new GlyphLayout();
-        txtPkmEnemigo.setText(new BitmapFont(), "Squirt");
-
-        txtTackleImage = new Image(txtTackleTexture);
-        txtTackleImage.setScale(2f);
-        flechaImg = new Image(flecha);
-        flechaImg.setScale(4f);
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1024, 768);
-
         StretchViewport viewport = new StretchViewport(1024, 768, camera);
-
         stage = new Stage(viewport);
-
         batch = stage.getBatch();
 
-        txtTackleImage.setPosition(70,140);
-        flechaImg.setPosition(40,150);
+        font = new BitmapFont();
+        font.getData().setScale(3.0f);
+
+        txtTackleImage = new Image(AssetLoader.ataquePlacaje);
+        txtTackleImage.setPosition(70, 140);
+        txtTackleImage.setScale(2f);
+
+        flechaImg = new Image(AssetLoader.flecha);
+        flechaImg.setPosition(40, 150);
+        flechaImg.setScale(4f);
+
         stage.addActor(txtTackleImage);
         stage.addActor(flechaImg);
-
-
-        Gdx.input.setInputProcessor(stage);
 
         txtTackleImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                txtTackleImage.setVisible(false);
-                flechaImg.setVisible(false);
-                txtTackleImage.setTouchable(Touchable.disabled);
-                flechaImg.setTouchable(Touchable.disabled);
-                showStats = false;
-                combatText = new Texture(Gdx.files.internal("cuadro_azul.png"));
-
+                if (estat == CombatState.SELECCION) {
+                    txtTackleImage.setVisible(false);
+                    flechaImg.setVisible(false);
+                    txtTackleImage.setTouchable(Touchable.disabled);
+                    flechaImg.setTouchable(Touchable.disabled);
+                    estat = CombatState.ATACANT;
+                }
             }
         });
-    }
 
-
-    @Override
-    public void show() {
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -122,97 +89,76 @@ public class CombatScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if(contVida == 0)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top.png"));
-        if(contVida == 1)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top_50.png"));
-        if(contVida == 2)vidaEnemigo = new Texture(Gdx.files.internal("hpbar_top_0.png"));
-
         batch.begin();
-        batch.draw(background, 0, 250, 1024, 518);
-        batch.draw(combatText, 0, 0, 1024, 250);
-        batch.draw(pkmEnemigo, 650, 450, 200,200);
-        batch.draw(pkmAliado, 175, 210, 250,250);
-        batch.draw(vidaEnemigo, 100, 500, 300,200);
-        batch.draw(vidaAliado, 650, 250, 350,200);
-        font.setColor(Color.BLACK);
+        batch.draw(AssetLoader.combateBackground, 0, 250, 1024, 518);
+        batch.draw(getHpTexture(), 100, 500, 300, 200); // vida enemic
+        batch.draw(AssetLoader.hpFull, 650, 250, 350, 200); // vida aliat
+        batch.draw(AssetLoader.pkmEnemigo, 650, 450, 200, 200);
+        batch.draw(AssetLoader.pkmAliado, 175, 210, 250, 250);
 
+        switch (estat) {
+            case SELECCION:
+                batch.draw(AssetLoader.attackSelection, 0, 0, 1024, 250);
+                font.setColor(Color.BLACK);
+                font.draw(batch, "Charmander", 690, 420);
+                font.draw(batch, "Squirt", 140, 650);
+                font.draw(batch, "35", 850, 185);
+                font.draw(batch, "35", 940, 185);
+                font.draw(batch, "Normal", 820, 95);
+                break;
 
-        font.getData().setScale(2.8f);
-        font.draw(batch, "Charmander", 690, 420);
-        font.draw(batch, "Squirt", 140, 650);
-        if(showStats && contVida!=2){
-            font.getData().setScale(3.0f);
-            font.draw(batch, "35", 850, 185);
-            font.draw(batch, "35", 940, 185);
-            font.draw(batch, "Normal", 820, 95);
-        }
-        if(!showStats){
-            font.getData().setScale(3.0f);
-            font.setColor(Color.WHITE);
-            font.draw(batch, "Nigga usó placaje. Pulsa para continuar.", 50, 200);
-        }
-        if (showStats && contVida == 2) {
-            font.getData().setScale(3.0f);
-            font.setColor(Color.WHITE);
-            font.draw(batch, "Has debilitado al pokemon. Pulsa para volver.", 50, 200);
+            case ATACANT:
+                batch.draw(AssetLoader.cuadroAzul, 0, 0, 1024, 250);
+                font.setColor(Color.WHITE);
+                font.draw(batch, "Has usat Placaje!", 50, 200);
+                estat = (contVida >= 2) ? CombatState.FINAL : CombatState.MISSATGE;
+                break;
 
-            txtTackleImage.setVisible(false);
-            flechaImg.setVisible(false);
-            txtTackleImage.setTouchable(Touchable.disabled);
-            flechaImg.setTouchable(Touchable.disabled);
-
-            combatText = new Texture(Gdx.files.internal("cuadro_azul.png"));
-
-            if (!mensajeMostrado) {
-
-                mensajeMostrado = true;
-                esperandoNuevoToque = true;
-            } else if (esperandoNuevoToque && Gdx.input.justTouched()) {
-
-                game.setScreen(new MapScreen((PokemonFireRedGame) game));
-            }
-        }
-        if(!showStats){
-                if(Gdx.input.isTouched()) {
-                    combatText = new Texture(Gdx.files.internal("attack_selection.png"));
+            case MISSATGE:
+                batch.draw(AssetLoader.cuadroAzul, 0, 0, 1024, 250);
+                font.setColor(Color.WHITE);
+                font.draw(batch, "Torna a atacar", 50, 200);
+                if (Gdx.input.justTouched()) {
+                    contVida++;
                     txtTackleImage.setVisible(true);
                     flechaImg.setVisible(true);
                     txtTackleImage.setTouchable(Touchable.enabled);
                     flechaImg.setTouchable(Touchable.enabled);
-                    showStats = true;
-                    contVida++;
+                    estat = CombatState.SELECCION;
                 }
+                break;
+
+            case FINAL:
+                batch.draw(AssetLoader.cuadroAzul, 0, 0, 1024, 250);
+                font.setColor(Color.WHITE);
+                font.draw(batch, "Has guanyat el combat! Pulsa per continuar.", 50, 200);
+                if (Gdx.input.justTouched()) {
+                    music.stop();
+                    game.setScreen(new MapScreen((PokemonFireRedGame) game, player));
+                }
+                break;
         }
 
-
-
         batch.end();
-
         stage.act(delta);
         stage.draw();
     }
 
-    @Override
-    public void resize(int width, int height) {
-
+    private Texture getHpTexture() {
+        if (contVida == 0) return AssetLoader.hpFull;
+        if (contVida == 1) return AssetLoader.hpHalf;
+        return AssetLoader.hpZero;
     }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
+    @Override public void resize(int width, int height) {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
+    @Override public void show() {}
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        music.dispose();
     }
 }
