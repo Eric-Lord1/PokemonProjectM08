@@ -81,7 +81,7 @@ public class CombatScreen implements Screen {
             enemigo = "Spearow";
         } else if (num <= 85) {
             pkmEnemigo = new Texture(Gdx.files.internal("font/sandsrew.png"));
-            enemigo = "Sandsrew";
+            enemigo = "Sandshrew";
         } else {
             pkmEnemigo = new Texture(Gdx.files.internal("font/ekans.png"));
             enemigo = "Ekans";
