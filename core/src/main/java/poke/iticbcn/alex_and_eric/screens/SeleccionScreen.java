@@ -18,9 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import poke.iticbcn.alex_and_eric.PokemonFireRedGame;
+import poke.iticbcn.alex_and_eric.actors.Player;
 
 public class SeleccionScreen implements Screen {
 
+    public static Player player = new Player();
     public static Music music;
     private Batch batch;
     private OrthographicCamera camera;
@@ -92,7 +94,7 @@ public class SeleccionScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game, "Charmander"));
+                game.setScreen(new MapScreen(game, "Charmander",player));
             }
         });
 
@@ -101,7 +103,7 @@ public class SeleccionScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game, "Bulbasaur"));
+                game.setScreen(new MapScreen(game, "Bulbasaur",player));
             }
         });
 
@@ -110,7 +112,7 @@ public class SeleccionScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 music.stop();
                 Gdx.input.setInputProcessor(null);
-                game.setScreen(new MapScreen(game,"Squirtle"));
+                game.setScreen(new MapScreen(game,"Squirtle",player));
             }
         });
 
