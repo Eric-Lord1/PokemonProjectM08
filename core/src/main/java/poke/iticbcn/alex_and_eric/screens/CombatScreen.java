@@ -30,6 +30,8 @@ public class CombatScreen implements Screen {
     private BitmapFont font;
     private boolean showStats = true;
     private int contVida = 0;
+    boolean mensajeMostrado = false;
+    boolean esperandoNuevoToque = false;
 
     private static Texture background;
     private static Texture combatText;
@@ -137,48 +139,48 @@ public class CombatScreen implements Screen {
         font.getData().setScale(2.8f);
         font.draw(batch, "Charmander", 690, 420);
         font.draw(batch, "Squirt", 140, 650);
-        if(showStats){
+        if(showStats && contVida!=2){
             font.getData().setScale(3.0f);
             font.draw(batch, "35", 850, 185);
             font.draw(batch, "35", 940, 185);
             font.draw(batch, "Normal", 820, 95);
-        }else{
-
-                font.getData().setScale(3.0f);
-                font.setColor(Color.WHITE);
-                font.draw(batch, "Nigga usó placaje. Pulsa para continuar.", 50, 200);
-
-
         }
         if(!showStats){
-            if(contVida == 1){
+            font.getData().setScale(3.0f);
+            font.setColor(Color.WHITE);
+            font.draw(batch, "Nigga usó placaje. Pulsa para continuar.", 50, 200);
+        }
+        if (showStats && contVida == 2) {
+            font.getData().setScale(3.0f);
+            font.setColor(Color.WHITE);
+            font.draw(batch, "Has debilitado al pokemon. Pulsa para volver.", 50, 200);
 
-                if(Gdx.input.isTouched()){
+            txtTackleImage.setVisible(false);
+            flechaImg.setVisible(false);
+            txtTackleImage.setTouchable(Touchable.disabled);
+            flechaImg.setTouchable(Touchable.disabled);
 
-                    font.getData().setScale(3.0f);
-                    font.setColor(Color.WHITE);
-                    font.draw(batch, "Has debilitado al pokemon. Pulsa para volver.", 50, 200);
+            combatText = new Texture(Gdx.files.internal("cuadro_azul.png"));
 
-                    if(showStats){
-                        if(Gdx.input.isTouched()){
-                            game.setScreen(new MapScreen((PokemonFireRedGame) game));
-                        }
-                    }
+            if (!mensajeMostrado) {
 
-                }
+                mensajeMostrado = true;
+                esperandoNuevoToque = true;
+            } else if (esperandoNuevoToque && Gdx.input.justTouched()) {
 
-            }else{
-                if(Gdx.input.isTouched()){
+                game.setScreen(new MapScreen((PokemonFireRedGame) game));
+            }
+        }
+        if(!showStats){
+                if(Gdx.input.isTouched()) {
                     combatText = new Texture(Gdx.files.internal("attack_selection.png"));
                     txtTackleImage.setVisible(true);
                     flechaImg.setVisible(true);
                     txtTackleImage.setTouchable(Touchable.enabled);
                     flechaImg.setTouchable(Touchable.enabled);
-                    showStats= true;
+                    showStats = true;
                     contVida++;
                 }
-            }
-
         }
 
 
