@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -97,6 +98,7 @@ public class CombatScreen implements Screen {
         Texture flecha = new Texture(Gdx.files.internal("flecha.png"));
 
 
+
         font = new BitmapFont();
         txtPlacaje = new GlyphLayout();
         txtPlacaje.setText(new BitmapFont(), "Placaje");
@@ -169,8 +171,8 @@ public class CombatScreen implements Screen {
 
 
         font.getData().setScale(2.8f);
-        font.draw(batch, inicial, 690, 420);
-        font.draw(batch, enemigo, 140, 650);
+        font.draw(batch, inicial, 700, 420);
+        font.draw(batch, enemigo, 130, 650);
         if(showStats && contVida!=2){
             font.getData().setScale(3.0f);
             font.draw(batch, "35", 850, 185);
@@ -180,12 +182,12 @@ public class CombatScreen implements Screen {
         if(!showStats){
             font.getData().setScale(3.0f);
             font.setColor(Color.WHITE);
-            font.draw(batch, "Nigga usó placaje. Pulsa para continuar.", 50, 200);
+            font.draw(batch, inicial + " usó placaje. Pulsa para continuar.", 50, 200);
         }
         if (showStats && contVida == 2) {
             font.getData().setScale(3.0f);
             font.setColor(Color.WHITE);
-            font.draw(batch, "Has debilitado al pokemon. Pulsa para volver.", 50, 200);
+            font.draw(batch, enemigo + " ha sido debilitado. Pulsa para volver.", 50, 200);
 
             txtTackleImage.setVisible(false);
             flechaImg.setVisible(false);
