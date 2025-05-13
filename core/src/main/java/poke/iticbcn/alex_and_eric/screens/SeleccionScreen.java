@@ -134,7 +134,7 @@ public class SeleccionScreen implements Screen {
         batch.draw(background, 0, 0, 1024, 768);
         font.setColor(Color.BLACK);
         font.getData().setScale(3f);
-        font.draw(batch, "Clica un Pokemon para empezar", 200, 700);
+        font.draw(batch, "Escoge un Pokemon para empezar", 200, 700);
         batch.end();
 
         stage.act(delta);

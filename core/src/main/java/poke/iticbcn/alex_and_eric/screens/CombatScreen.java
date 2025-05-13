@@ -66,7 +66,7 @@ public class CombatScreen implements Screen {
         this.inicial = inicial;
         int num = random.nextInt(100) + 1;
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/combate.mp3"));
-        music.setVolume(0.2f);
+        music.setVolume(0.5f);
         music.setLooping(true);
         music.play();
 
@@ -238,7 +238,7 @@ public class CombatScreen implements Screen {
                 mensajeMostrado = true;
                 esperandoNuevoToque = true;
             } else if (esperandoNuevoToque && Gdx.input.justTouched()) {
-
+                music.stop();
                 MapScreen mapa = new MapScreen((PokemonFireRedGame) game, inicial, player);
                 mapa.haTornatDeCombat = true;
                 mapa.tempsDespresCombat = 0f;
