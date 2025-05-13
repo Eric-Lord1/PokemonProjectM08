@@ -39,6 +39,12 @@ public class CombatScreen implements Screen {
     boolean esperandoNuevoToque = false;
     private String inicial;
     private String enemigo;
+    float animationTime = 0f;
+    float animationDuration = 1f; // 1 segundo total
+    boolean prevShowStats = true; // Declara esto en la clase (fuera del render)
+
+
+
 
     private static Texture background;
     private static Texture combatText;
@@ -47,6 +53,7 @@ public class CombatScreen implements Screen {
     private static Texture vidaEnemigo;
     private static Texture vidaAliado;
     private static Texture txtTackleTexture;
+    private static Texture tackleAnim;
     private static Image txtTackleImage;
     private static Image flechaImg;
     private static GlyphLayout txtPlacaje;
@@ -91,6 +98,7 @@ public class CombatScreen implements Screen {
         }
 
         txtTackleTexture = new Texture(Gdx.files.internal("placaje.png"));
+        tackleAnim = new Texture(Gdx.files.internal("tackle_anim.png"));
         if(inicial.equalsIgnoreCase("Charmander"))pkmAliado = new Texture(Gdx.files.internal("back/4_back.png"));
         if(inicial.equalsIgnoreCase("Bulbasaur"))pkmAliado = new Texture(Gdx.files.internal("back/1_back.png"));
         if(inicial.equalsIgnoreCase("Squirtle"))pkmAliado = new Texture(Gdx.files.internal("back/7_back.png"));
@@ -166,26 +174,53 @@ public class CombatScreen implements Screen {
         batch.draw(background, 0, 250, 1024, 518);
         batch.draw(combatText, 0, 0, 1024, 250);
         batch.draw(pkmEnemigo, 620, 430, 250,250);
-        batch.draw(pkmAliado, 175, 250, 200,200);
-        batch.draw(vidaEnemigo, 100, 500, 300,200);
-        batch.draw(vidaAliado, 650, 250, 350,200);
+        if(showStats)batch.draw(pkmAliado, 175, 250, 200,200);
+        batch.draw(vidaEnemigo, 100, 500, 350,200);
+        batch.draw(vidaAliado, 600, 250, 400,200);
         font.setColor(Color.BLACK);
 
 
         font.getData().setScale(2.8f);
-        font.draw(batch, inicial, 700, 420);
+        font.draw(batch, inicial, 650, 420);
         font.draw(batch, enemigo, 130, 650);
+        if (!showStats && prevShowStats) {
+            animationTime = 0f;
+        }
         if(showStats && contVida!=2){
             font.getData().setScale(3.0f);
             font.draw(batch, "35", 850, 185);
             font.draw(batch, "35", 940, 185);
             font.draw(batch, "Normal", 820, 95);
         }
-        if(!showStats){
+        if (!showStats) {
+            // Acumulamos el tiempo
+            animationTime += Gdx.graphics.getDeltaTime();
+
+            // Aseguramos que no pase de la duración total
+            if (animationTime > animationDuration) {
+                animationTime = animationDuration;
+            }
+
+            // Interpolación: valor entre 0 y 1
+            float progress = animationTime / animationDuration;
+
+            // Ping-pong: va y vuelve
+            float x;
+            if (progress <= 0.5f) {
+                if(progress <=0.3f)batch.draw(tackleAnim, 650, 520, 50,50);
+                x = 175 + (250 - 175) * (progress / 0.5f);
+
+            } else {
+                x = 250 - (250 - 175) * ((progress - 0.5f) / 0.5f); // Vuelta
+            }
+
+            batch.draw(pkmAliado, x, 250, 200, 200);
+
             font.getData().setScale(3.0f);
             font.setColor(Color.WHITE);
             font.draw(batch, inicial + " usó placaje. Pulsa para continuar.", 50, 200);
         }
+        prevShowStats = showStats;
         if (showStats && contVida >= 2) {
             font.getData().setScale(3.0f);
             font.setColor(Color.WHITE);
