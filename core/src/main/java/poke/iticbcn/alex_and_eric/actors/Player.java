@@ -41,8 +41,8 @@ public class Player {
 
         currentAnimation = walkDown;
 
-        x = ((float) Gdx.graphics.getWidth() / 2);
-        y = ((float) Gdx.graphics.getHeight() /2);
+        x = (50);
+        y = (535);
         stateTime = 0f;
     }
 
@@ -52,9 +52,8 @@ public class Player {
         if (Gdx.input.isTouched()) {
             int touchX = Gdx.input.getX();
             int touchY = Gdx.input.getY();
-            touchY = Gdx.graphics.getHeight() - touchY; // corregir eje Y
+            touchY = Gdx.graphics.getHeight() - touchY;
 
-            // calcular centro del jugador
             float scale = 4f;
             float playerCenterX = x + (frameWidth * scale) / 2;
             float playerCenterY = y + (frameHeight * scale) / 2;
@@ -63,7 +62,6 @@ public class Player {
             float diffY = touchY - playerCenterY;
 
             if (Math.abs(diffX) > Math.abs(diffY)) {
-                // Movimiento horizontal
                 if (diffX < 0) {
                     x -= speed * delta;
                     currentAnimation = walkLeft;
@@ -72,7 +70,6 @@ public class Player {
                     currentAnimation = walkRight;
                 }
             } else {
-                // Movimiento vertical
                 if (diffY < 0) {
                     y -= speed * delta;
                     currentAnimation = walkDown;

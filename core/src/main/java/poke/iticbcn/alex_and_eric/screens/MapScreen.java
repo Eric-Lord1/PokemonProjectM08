@@ -23,6 +23,10 @@ public class MapScreen implements Screen {
     private float scaleY;
     private String inicial;
 
+    public boolean haTornatDeCombat = false;
+    public float tempsDespresCombat = 0f;
+    private final float TEMPS_IMMUNITAT = 2f;
+
     public MapScreen(PokemonFireRedGame game, String inicial, Player player) {
         this.player = player;
         this.game = game;
@@ -47,6 +51,16 @@ public class MapScreen implements Screen {
     public void render(float delta) {
         player.update(delta);
 
+        if (haTornatDeCombat) {
+            tempsDespresCombat += delta;
+            if (tempsDespresCombat < TEMPS_IMMUNITAT) {
+                renderMapa();
+                return;
+            } else {
+                haTornatDeCombat = false;
+            }
+        }
+
         float escala = 4f;
         float playerCenterX = player.getX() + (16 * escala) / 2;
         float playerCenterY = player.getY() + (23 * escala) / 2;
@@ -65,12 +79,17 @@ public class MapScreen implements Screen {
                     System.out.println("S'ha iniciat un combat!");
                     backgroundMusic.stop();
                     Gdx.input.setInputProcessor(null);
-                    game.setScreen(new CombatScreen(this.game, inicial, player));
+                    CombatScreen combat = new CombatScreen(this.game, inicial, player);
+                    game.setScreen(combat);
                     return;
                 }
             }
         }
 
+        renderMapa();
+    }
+
+    private void renderMapa() {
         ScreenUtils.clear(0.1f, 0.5f, 0.8f, 1);
         batch.begin();
         batch.draw(mapTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

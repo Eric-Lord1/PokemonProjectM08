@@ -186,7 +186,7 @@ public class CombatScreen implements Screen {
             font.setColor(Color.WHITE);
             font.draw(batch, inicial + " usó placaje. Pulsa para continuar.", 50, 200);
         }
-        if (showStats && contVida == 2) {
+        if (showStats && contVida >= 2) {
             font.getData().setScale(3.0f);
             font.setColor(Color.WHITE);
             font.draw(batch, enemigo + " ha sido debilitado. Pulsa para volver.", 50, 200);
@@ -204,7 +204,11 @@ public class CombatScreen implements Screen {
                 esperandoNuevoToque = true;
             } else if (esperandoNuevoToque && Gdx.input.justTouched()) {
 
-                game.setScreen(new MapScreen((PokemonFireRedGame) game, inicial, player));
+                MapScreen mapa = new MapScreen((PokemonFireRedGame) game, inicial, player);
+                mapa.haTornatDeCombat = true;
+                mapa.tempsDespresCombat = 0f;
+                game.setScreen(mapa);
+
             }
         }
         if(!showStats){

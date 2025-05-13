@@ -3,8 +3,6 @@ package poke.iticbcn.alex_and_eric;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import poke.iticbcn.alex_and_eric.assets.*;
-import poke.iticbcn.alex_and_eric.screens.CombatScreen;
-import poke.iticbcn.alex_and_eric.screens.MapScreen;
 import poke.iticbcn.alex_and_eric.screens.SeleccionScreen;
 
 public class PokemonFireRedGame extends Game {
