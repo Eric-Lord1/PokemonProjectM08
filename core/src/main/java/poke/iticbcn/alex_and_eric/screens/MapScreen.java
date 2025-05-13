@@ -23,9 +23,13 @@ public class MapScreen implements Screen {
     private float scaleY;
     private String inicial;
 
+    // Protecció post-combat
     public boolean haTornatDeCombat = false;
     public float tempsDespresCombat = 0f;
     private final float TEMPS_IMMUNITAT = 2f;
+
+    // Control de si el jugador ha sortit de l'herba
+    private boolean estaDinsHerba = false;
 
     public MapScreen(PokemonFireRedGame game, String inicial, Player player) {
         this.player = player;
@@ -51,22 +55,14 @@ public class MapScreen implements Screen {
     public void render(float delta) {
         player.update(delta);
 
-        if (haTornatDeCombat) {
-            tempsDespresCombat += delta;
-            if (tempsDespresCombat < TEMPS_IMMUNITAT) {
-                renderMapa();
-                return;
-            } else {
-                haTornatDeCombat = false;
-            }
-        }
-
         float escala = 4f;
         float playerCenterX = player.getX() + (16 * escala) / 2;
         float playerCenterY = player.getY() + (23 * escala) / 2;
 
         int pixelX = (int)(playerCenterX / scaleX);
         int pixelY = pixmap.getHeight() - (int)(playerCenterY / scaleY); // Invert Y
+
+        boolean esHerbaAra = false;
 
         if (pixelX >= 0 && pixelX < pixmap.getWidth() && pixelY >= 0 && pixelY < pixmap.getHeight()) {
             int pixel = pixmap.getPixel(pixelX, pixelY);
@@ -75,17 +71,31 @@ public class MapScreen implements Screen {
             int b = (pixel >> 8) & 0xff;
 
             if (g > 140 && r < 100 && b < 100) {
-                if (Math.random() < 0.02) {
-                    System.out.println("S'ha iniciat un combat!");
-                    backgroundMusic.stop();
-                    Gdx.input.setInputProcessor(null);
-                    CombatScreen combat = new CombatScreen(this.game, inicial, player);
-                    game.setScreen(combat);
-                    return;
-                }
+                esHerbaAra = true;
             }
         }
 
+        // 🛡️ Bloqueig post-combat i fins sortir de l'herba
+        if (haTornatDeCombat || estaDinsHerba) {
+            tempsDespresCombat += delta;
+            if (tempsDespresCombat >= TEMPS_IMMUNITAT) {
+                haTornatDeCombat = false;
+            }
+            estaDinsHerba = esHerbaAra;
+            renderMapa();
+            return;
+        }
+
+        // 🌱 Entra en combat aleatori si estàs en herba
+        if (esHerbaAra && Math.random() < 0.02) {
+            System.out.println("S'ha iniciat un combat!");
+            backgroundMusic.stop();
+            Gdx.input.setInputProcessor(null);
+            game.setScreen(new CombatScreen(game, inicial, player));
+            return;
+        }
+
+        estaDinsHerba = esHerbaAra;
         renderMapa();
     }
 
@@ -106,15 +116,8 @@ public class MapScreen implements Screen {
         player.dispose();
     }
 
-    @Override
-    public void resize(int width, int height) { }
-
-    @Override
-    public void pause() { }
-
-    @Override
-    public void resume() { }
-
-    @Override
-    public void hide() { }
+    @Override public void resize(int width, int height) {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
 }

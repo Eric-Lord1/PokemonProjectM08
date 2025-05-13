@@ -42,7 +42,7 @@ public class IntroActivity extends Activity {
 
         videoView.requestFocus(); // ajuda en alguns dispositius
         videoView.setOnPreparedListener(mp -> mp.setVolume(1.0f, 1.0f));
-        
+
         // Quan acaba o toques la pantalla, arrenca el joc
         videoView.setOnCompletionListener(mp -> startGame());
         videoView.setOnTouchListener((v, event) -> {
