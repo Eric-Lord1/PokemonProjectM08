@@ -7,13 +7,12 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 import poke.iticbcn.alex_and_eric.PokemonFireRedGame;
 
-/** Launches the Android application. */
 public class AndroidLauncher extends AndroidApplication {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
-        configuration.useImmersiveMode = true; // Recommended, but not required.
-        initialize(new PokemonFireRedGame(), configuration);
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        config.useImmersiveMode = true;
+        initialize(new PokemonFireRedGame(), config);
     }
 }
